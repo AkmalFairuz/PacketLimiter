@@ -21,6 +21,9 @@ class Task extends PMTask{
             $key = spl_object_hash($player);
             $val = $this->plugin->packetPerSecond[$key];
             if($val >= $this->plugin->packetLimit) {
+                if(!isset($this->plugin->warning[$key])) {
+                    $this->plugin->warning[$key] = 0;
+                }
                 $this->plugin->warning[$key]++;
                 if($this->plugin->warning[$key] >= $this->plugin->maxWarning) {
                     $this->plugin->getLogger()->warning($player->getName() . " was kicked due to reach packet limit");
