@@ -1,0 +1,6 @@
+# Normal player sent ~200 packet every second
+packet_per_second: 250
+# If reach limit packet per second they will get warning and if reach maximum warning they kicked.
+maximum_warning: 5
+
+kick_message: "You sending too many packets!"
