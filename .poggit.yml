@@ -1,0 +1,9 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/AkmalFairuz/PacketLimiter
+build-by-default: true
+branches:
+- master
+projects:
+  PacketLimiter:
+    path: ""
+    icon: resources/logo.png
+...
