@@ -3,3 +3,4 @@ version: 1.0.0
 api: 3.10.0
 main: AkmalFairuz\PacketLimiter\Main
 author: AkmalFairuz
+mcpe-protocol: 448
