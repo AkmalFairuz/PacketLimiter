@@ -17,11 +17,12 @@ class Task extends PMTask{
     }
 
     public function onRun(int $currentTick){
-        foreach($this->plugin->packetPerSecond as $key => $val) {
+        foreach(Server::getInstance()->getOnlinePlayers() as $player) {
+            $key = $player->getName();
+            $val = $this->plugin->packetPerSecond[$key];
             if($val >= $this->plugin->packetLimit) {
                 $this->plugin->warning[$key]++;
                 if($this->plugin->warning[$key] >= $this->plugin->maxWarning) {
-                    $player = Server::getInstance()->getOnlinePlayers()[$key];
                     $this->plugin->getLogger()->warning($player->getName() . " was kicked due to reach packet limit");
                     $player->kick($this->plugin->kickMessage, false);
                     unset($this->plugin->packetPerSecond[$key]);

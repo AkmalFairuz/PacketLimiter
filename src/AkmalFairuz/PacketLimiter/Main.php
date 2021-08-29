@@ -44,6 +44,6 @@ class Main extends PluginBase implements Listener{
             return;
         }
         $player = $event->getPlayer();
-        $this->packetPerSecond[$player->getLoaderId()]++;
+        $this->packetPerSecond[$player->getName()]++;
     }
 }
