@@ -18,7 +18,7 @@ class Task extends PMTask{
 
     public function onRun(int $currentTick){
         foreach(Server::getInstance()->getOnlinePlayers() as $player) {
-            $key = $player->getName();
+            $key = spl_object_hash($player);
             $val = $this->plugin->packetPerSecond[$key];
             if($val >= $this->plugin->packetLimit) {
                 $this->plugin->warning[$key]++;

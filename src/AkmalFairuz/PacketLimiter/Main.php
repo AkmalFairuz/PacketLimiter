@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AkmalFairuz\PacketLimiter;
 
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\network\mcpe\protocol\BatchPacket;
 use pocketmine\plugin\PluginBase;
@@ -44,6 +45,14 @@ class Main extends PluginBase implements Listener{
             return;
         }
         $player = $event->getPlayer();
-        $this->packetPerSecond[$player->getName()]++;
+        $this->packetPerSecond[spl_object_hash($player)]++;
+    }
+
+    /**
+     * @param PlayerQuitEvent $event
+     * @priority MONITOR
+     */
+    public function onPlayerQuit(PlayerQuitEvent $event) {
+        unset($this->packetPerSecond[spl_object_hash($event->getPlayer())]);
     }
 }
