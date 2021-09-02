@@ -45,10 +45,11 @@ class Main extends PluginBase implements Listener{
             return;
         }
         $player = $event->getPlayer();
-        if(!isset($this->packetPerSecond[spl_object_hash($player)])) {
-            $this->packetPerSecond[spl_object_hash($player)] = 0;
+        $key = spl_object_hash($player);
+        if(!isset($this->packetPerSecond[$key])) {
+            $this->packetPerSecond[$key] = 0;
         }
-        $this->packetPerSecond[spl_object_hash($player)]++;
+        $this->packetPerSecond[$key]++;
     }
 
     /**
