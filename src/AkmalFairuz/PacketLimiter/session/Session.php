@@ -37,8 +37,13 @@ class Session{
         ++$this->packets;
     }
 
-    public function check(){
-        if($this->packets >= $this->manager->packetLimit) {
+    public function check(float $time){
+        if($time >= 1.2) {
+            $limit = intval($this->manager->packetLimit * $time);
+        } else {
+            $limit = $this->manager->packetLimit;
+        }
+        if($this->packets >= $limit) {
             $this->addWarning();
         }
 

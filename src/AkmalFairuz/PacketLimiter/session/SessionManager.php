@@ -54,9 +54,9 @@ class SessionManager{
         return $session;
     }
 
-    public function check(){
+    public function check(float $time){
         foreach($this->sessions as $session) {
-            $session->check();
+            $session->check($time);
         }
     }
 }

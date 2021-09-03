@@ -17,13 +17,13 @@ class Task extends PMTask{
     }
 
     public function onRun(int $currentTick){
-        if(microtime(true) - $this->lastCheck >= 1) {
-            $this->check();
+        if(($time = microtime(true) - $this->lastCheck) >= 1) {
+            $this->check($time);
             $this->lastCheck = microtime(true);
         }
     }
 
-    private function check() {
-        SessionManager::getInstance()->check();
+    private function check(float $time) {
+        SessionManager::getInstance()->check($time);
     }
 }
