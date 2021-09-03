@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AkmalFairuz\PacketLimiter;
 
+use AkmalFairuz\PacketLimiter\session\SessionManager;
+use AkmalFairuz\PacketLimiter\task\Task;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\server\DataPacketReceiveEvent;
@@ -12,27 +14,14 @@ use pocketmine\plugin\PluginBase;
 
 class Main extends PluginBase implements Listener{
 
-    /** @var int[] */
-    public $packetPerSecond = [];
-
-    /** @var int[] */
-    public $warning = [];
-
-    /** @var int */
-    public $packetLimit;
-
-    /** @var int */
-    public $maxWarning;
-
-    /** @var string */
-    public $kickMessage;
-
     public function onEnable(){
-        $this->maxWarning = $this->getConfig()->get("maximum_warning", 5);
-        $this->packetLimit = $this->getConfig()->get("packet_per_second", 250);
-        $this->kickMessage = $this->getConfig()->get("kick_message", "You sending too many packets!");
+        $cfg = $this->getConfig();
+        $maxWarn = $cfg->get("maximum_warning", 5);
+        $packetLimit = $cfg->get("packet_per_second", 250);
+        $kickMessage = $cfg->get("kick_message", "You sending too many packets!");
+        SessionManager::create($maxWarn, $packetLimit, $kickMessage);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        $this->getScheduler()->scheduleRepeatingTask(new Task($this), 20);
+        $this->getScheduler()->scheduleRepeatingTask(new Task(), 1);
     }
 
     /**
@@ -45,11 +34,7 @@ class Main extends PluginBase implements Listener{
             return;
         }
         $player = $event->getPlayer();
-        $key = spl_object_hash($player);
-        if(!isset($this->packetPerSecond[$key])) {
-            $this->packetPerSecond[$key] = 0;
-        }
-        $this->packetPerSecond[$key]++;
+        SessionManager::getInstance()->get($player)->addPacket();
     }
 
     /**
@@ -57,6 +42,6 @@ class Main extends PluginBase implements Listener{
      * @priority MONITOR
      */
     public function onPlayerQuit(PlayerQuitEvent $event) {
-        unset($this->packetPerSecond[spl_object_hash($event->getPlayer())]);
+        SessionManager::getInstance()->remove($event->getPlayer());
     }
 }
