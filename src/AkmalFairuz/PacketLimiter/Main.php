@@ -9,12 +9,12 @@ use AkmalFairuz\PacketLimiter\task\Task;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\server\DataPacketReceiveEvent;
-use pocketmine\network\mcpe\protocol\BatchPacket;
+use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 
 class Main extends PluginBase implements Listener{
 
-    public function onEnable(){
+    public function onEnable(): void {
         $cfg = $this->getConfig();
         $maxWarn = $cfg->get("maximum_warning", 5);
         $packetLimit = $cfg->get("packet_per_second", 250);
@@ -29,12 +29,10 @@ class Main extends PluginBase implements Listener{
      * @priority MONITOR
      */
     public function onPacketReceive(DataPacketReceiveEvent $event) {
-        $packet = $event->getPacket();
-        if($packet instanceof BatchPacket) {
-            return;
+        $player = $event->getOrigin()->getPlayer();
+        if($player instanceof Player) {
+            SessionManager::getInstance()->get($player)->addPacket();
         }
-        $player = $event->getPlayer();
-        SessionManager::getInstance()->get($player)->addPacket();
     }
 
     /**

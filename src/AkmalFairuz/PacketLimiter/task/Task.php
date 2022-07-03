@@ -16,7 +16,7 @@ class Task extends PMTask{
         $this->lastCheck = microtime(true);
     }
 
-    public function onRun(int $currentTick){
+    public function onRun(): void {
         if(($time = microtime(true) - $this->lastCheck) >= 1) {
             $this->check($time);
             $this->lastCheck = microtime(true);

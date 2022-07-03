@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkmalFairuz\PacketLimiter\session;
 
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class Session{
 
@@ -27,7 +27,7 @@ class Session{
 
     private function addWarning() {
         if($this->warnings >= $this->manager->maxWarn) {
-            $this->player->kick($this->manager->kickMessage, false);
+            $this->player->kick($this->manager->kickMessage);
             return;
         }
         ++$this->warnings;
